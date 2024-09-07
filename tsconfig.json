@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "removeComments": false,
+    "skipLibCheck": true,
+    "exactOptionalPropertyTypes": false
+  },
+  "include": ["@types/gnome-shell/ambient.d.ts", "src/**/*.ts"],
+  "exclude": [".eslintrc.cjs"]
+}
