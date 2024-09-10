@@ -19,6 +19,7 @@ import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import { QuickSettingsItem } from "resource:///org/gnome/shell/ui/quickSettings.js";
 import { FitBreaksIndicator } from "./lib/indicator.js";
+import { gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 
 export default class FitBreaksExtension extends Extension {
   private indicator?: FitBreaksIndicator;
@@ -34,6 +35,6 @@ export default class FitBreaksExtension extends Extension {
       item.destroy(),
     );
     this.indicator.destroy();
-    // this.indicator = undefined;
+    this.indicator = undefined;
   }
 }
