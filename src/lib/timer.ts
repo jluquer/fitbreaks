@@ -1,33 +1,25 @@
 import GLib from "gi://GLib";
 import { FitBreaksIndicator } from "./indicator.js";
+import { notify } from "./notification.js";
 
 export class Timer {
   private indicator: FitBreaksIndicator;
   private timerDuration = 1800; // 30 min
-  private timeouts: number[] = [];
+  private interval?: GLib.Source;
+  private exercises = ["Stretch neck"];
 
   constructor(indicator: FitBreaksIndicator) {
     this.indicator = indicator;
   }
 
   startTimer() {
-    this.removeTimer();
-
-    let timerDelay = this.timerDuration;
-
-    let secondsLeft = timerDelay;
+    let secondsLeft = this.timerDuration;
     this.printTimer(secondsLeft);
-    this.timeouts = [
-      GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
-        secondsLeft -= 1;
-        this.printTimer(secondsLeft);
-        return GLib.SOURCE_CONTINUE;
-      }),
-      GLib.timeout_add(GLib.PRIORITY_DEFAULT, timerDelay * 1000, () => {
-        this.removeTimer();
-        return GLib.SOURCE_REMOVE;
-      }),
-    ];
+    this.interval = setInterval(() => {
+      secondsLeft -= 1;
+      this.printTimer(secondsLeft);
+      if (secondsLeft <= 0) this.restart();
+    }, 1000);
   }
 
   private formatTime(seconds: number) {
@@ -53,8 +45,13 @@ export class Timer {
     this.indicator.timerLabel.text = this.formatTime(seconds);
   }
 
+  private restart() {
+    this.removeTimer();
+    this.exercises[0] &&
+      notify(this.exercises[0]).finally(() => this.startTimer());
+  }
+
   removeTimer() {
-    this.timeouts.forEach((t) => GLib.Source.remove(t));
-    this.timeouts = [];
+    if (this.interval) clearInterval(this.interval);
   }
 }

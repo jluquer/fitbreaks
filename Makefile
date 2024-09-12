@@ -27,8 +27,10 @@ install: $(NAME).zip
 	@rm -rf ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
 	@mv dist ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
 
-dev: install
+run:
 	dbus-run-session -- gnome-shell --nested --wayland
+
+dev: install run
 
 clean:
 	@rm -rf dist node_modules $(NAME).zip
