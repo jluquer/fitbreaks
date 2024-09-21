@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.fitbreaks" path="/org/gnome/shell/extensions/fitbreaks/">
+    <key type="as" name="exercises">
+        <default>['Stretch neck', 'Streck forearms', 'Shoulder rotations']</default>
+        <summary>Exercise list</summary>
+        <description>A list of exercises to do on each break</description>
+    </key>
+  </schema>
+</schemalist>
