@@ -5,10 +5,11 @@ import Clutter from "gi://Clutter";
 import { SystemIndicator } from "resource:///org/gnome/shell/ui/quickSettings.js";
 import { gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
 
-import { getIcon } from "./utils.js";
+import { formatTime, getIcon } from "./utils.js";
 import { FitIcon } from "./constants.js";
 import { FitBreaksToggle } from "./toggle.js";
 import { Timer } from "./timer.js";
+import { notifyExercise } from "./notification.js";
 
 export const FitBreaksIndicator = GObject.registerClass(
   class FitBreaksIndicator extends SystemIndicator {
@@ -16,20 +17,22 @@ export const FitBreaksIndicator = GObject.registerClass(
     timerLabel!: St.Label;
     private toggle: FitBreaksToggle;
     private timerEnabled = false;
+    private timer = new Timer();
+    private listeners?: number[];
 
     constructor(path: String) {
       super();
       this.toggle = new FitBreaksToggle(path);
+      this.indicator = this._addIndicator();
       this.addIcon(path);
       this.addLabel();
+      this.handleVisibility([this.timerLabel, this.indicator]);
       this.quickSettingsItems.push(this.toggle);
-      this.toggle.connect("clicked", this.onClick.bind(this));
+      this.toggle.connect("clicked", this.onClickQuickToggle.bind(this));
     }
 
     private addIcon(path: String) {
-      this.indicator = this._addIndicator();
       this.indicator.gicon = getIcon(path, FitIcon);
-      this.makeVisibleOnChecked(this.indicator);
     }
 
     private addLabel() {
@@ -38,24 +41,43 @@ export const FitBreaksIndicator = GObject.registerClass(
         y_align: Clutter.ActorAlign.CENTER,
       });
       this.add_child(this.timerLabel);
-      this.makeVisibleOnChecked(this.timerLabel);
     }
 
-    private makeVisibleOnChecked(element: any) {
-      if (element)
+    private handleVisibility(elements: any[]) {
+      elements.forEach((element) => {
+        if (!element) return;
         this.toggle.bind_property(
           "checked",
           element,
           "visible",
           GObject.BindingFlags.SYNC_CREATE,
         );
+      });
     }
 
-    private onClick() {
-      console.log("timer enabled: " + this.timerEnabled);
+    private onClickQuickToggle() {
       this.timerEnabled = !this.timerEnabled;
-      const timer = new Timer(this);
-      this.timerEnabled ? timer.startTimer() : timer.removeTimer();
+      this.timerEnabled ? this.activateTimer() : this.disableTimer();
+    }
+
+    private activateTimer() {
+      this.listeners = [
+        this.timer.connect("tic", (_, seconds) => {
+          console.log("seconds", seconds);
+          this.timerLabel.text = formatTime(seconds);
+        }),
+        this.timer.connect("stop", () =>
+          notifyExercise("Stretch neck").finally(
+            () => this.timerEnabled && this.timer.start(),
+          ),
+        ),
+      ];
+      this.timer.start();
+    }
+
+    private disableTimer() {
+      this.listeners?.forEach((listener) => this.timer.disconnect(listener));
+      this.timer.removeTimer();
     }
   },
 );

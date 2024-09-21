@@ -1,16 +1,16 @@
 import * as MessageTray from "resource:///org/gnome/shell/ui/messageTray.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
 
-export function notify(exercise: String) {
+export function notifyExercise(exercise: String) {
   const source = new MessageTray.Source({
-    title: "Break",
+    title: "Fit Break",
     iconName: "face-laugh-symbolic",
   });
   Main.messageTray.add(source);
 
   const notification = new MessageTray.Notification({
     source,
-    title: "Fit Break",
+    title: "Time to move the skeleton!",
     body: `You have to do: ${exercise}`,
     urgency: MessageTray.Urgency.CRITICAL,
   });
