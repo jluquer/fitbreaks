@@ -26,15 +26,18 @@ import { FitBreaksToggle } from "./lib/toggle.js";
 import { Timer } from "./lib/timer.js";
 import { formatTime } from "./lib/utils.js";
 import { notifyExercise } from "./lib/notification.js";
+import { ExerciseManager } from "./lib/exercise-manager.js";
 
 export default class FitBreaksExtension extends Extension {
   private indicator!: FitBreaksIndicator;
   private toggle!: FitBreaksToggle;
+  private exerciseManager!: ExerciseManager;
   private timer = new Timer();
   private listeners?: number[];
 
   override enable() {
-    console.log("enabling");
+    const settings = this.getSettings("org.gnome.shell.extensions.fitbreaks");
+    this.exerciseManager = new ExerciseManager(settings);
     this.toggle = new FitBreaksToggle(this.path);
     this.indicator = new FitBreaksIndicator(this.path);
     this.indicator.handleVisibility(this.toggle);
@@ -62,7 +65,7 @@ export default class FitBreaksExtension extends Extension {
         this.indicator.label.text = formatTime(seconds);
       }),
       this.timer.connect("stop", () =>
-        notifyExercise("Stretch neck").finally(
+        notifyExercise(this.exerciseManager.getExercise()).finally(
           () => this.toggle.checked && this.timer.start(),
         ),
       ),
