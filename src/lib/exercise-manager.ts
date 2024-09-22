@@ -6,8 +6,10 @@ export class ExerciseManager {
   private order = 0;
 
   constructor(settings: Gio.Settings) {
-    this.exercises = settings.get_strv("exercises");
-    this.random = settings.get_boolean("exercises-random");
+    this.exercises = settings.get_strv("exercises") ?? [
+      "Could not get any exercise from settings",
+    ];
+    this.random = settings.get_boolean("exercises-random") ?? true;
   }
 
   getExercise(): string {
