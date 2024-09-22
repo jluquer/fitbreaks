@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.fitbreaks" path="/org/gnome/shell/extensions/fitbreaks/">
-    <key name="exercises" type="as">
-        <default>['Stretch neck', 'Strech forearms', 'Shoulder rotations']</default>
-        <summary>Exercise list</summary>
-        <description>A list of exercises to do on each break</description>
-    </key>
-    <key name="exercises-random" type="b">
-        <default>true</default>
-        <summary>Get exercises randomly</summary>
-        <description>Get exercises from list randomly or not</description>
-    </key>
-  </schema>
+    <schema id="org.gnome.shell.extensions.fitbreaks" path="/org/gnome/shell/extensions/fitbreaks/">
+        <key name="timer-duration" type="u">
+            <default>30</default>
+            <summary>Timer duration in minutes</summary>
+        </key>
+        <key name="exercises" type="as">
+            <default>['Stretch neck', 'Strech forearms', 'Shoulder rotations']</default>
+            <summary>Exercise list</summary>
+            <description>A list of exercises to do on each break</description>
+        </key>
+        <key name="exercises-random" type="b">
+            <default>true</default>
+            <summary>Get exercises randomly</summary>
+            <description>Get exercises from list randomly or not</description>
+        </key>
+    </schema>
 </schemalist>

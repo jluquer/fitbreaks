@@ -1,4 +1,5 @@
 import Gio from "gi://Gio";
+import { schemas } from "./constants.js";
 export class ExerciseManager {
   private exercises: string[];
   private exercisesIndexUsed: number[] = [];
@@ -6,10 +7,10 @@ export class ExerciseManager {
   private order = 0;
 
   constructor(settings: Gio.Settings) {
-    this.exercises = settings.get_strv("exercises") ?? [
+    this.exercises = settings.get_strv(schemas.exercises) ?? [
       "Could not get any exercise from settings",
     ];
-    this.random = settings.get_boolean("exercises-random") ?? true;
+    this.random = settings.get_boolean(schemas.exerciseRandom) ?? true;
   }
 
   getExercise(): string {

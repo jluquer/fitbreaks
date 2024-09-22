@@ -32,11 +32,12 @@ export default class FitBreaksExtension extends Extension {
   private indicator!: FitBreaksIndicator;
   private toggle!: FitBreaksToggle;
   private exerciseManager!: ExerciseManager;
-  private timer = new Timer();
+  private timer!: Timer;
   private listeners?: number[];
 
   override enable() {
     const settings = this.getSettings("org.gnome.shell.extensions.fitbreaks");
+    this.timer = new Timer(settings);
     this.exerciseManager = new ExerciseManager(settings);
     this.toggle = new FitBreaksToggle(this.path);
     this.indicator = new FitBreaksIndicator(this.path);

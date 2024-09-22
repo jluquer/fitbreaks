@@ -1,5 +1,7 @@
+import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import GObject from "gi://GObject";
+import { schemas } from "./constants.js";
 
 export const Timer = GObject.registerClass(
   {
@@ -9,8 +11,14 @@ export const Timer = GObject.registerClass(
     },
   },
   class Timer extends GObject.Object {
-    private timerDuration = 5; // 1800; // 30 min
+    private timerDuration: number;
     private interval?: GLib.Source;
+
+    constructor(settings: Gio.Settings) {
+      super();
+      const timerDuration = settings.get_uint(schemas.timerDuration);
+      this.timerDuration = timerDuration ? timerDuration * 60 : 5;
+    }
 
     start() {
       let secondsLeft = this.timerDuration;
