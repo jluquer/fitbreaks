@@ -27,6 +27,7 @@ import { Timer } from "./lib/timer.js";
 import { formatTime } from "./lib/utils.js";
 import { notifyExercise } from "./lib/notification.js";
 import { ExerciseManager } from "./lib/exercise-manager.js";
+import { settingsKey } from "./lib/constants.js";
 
 export default class FitBreaksExtension extends Extension {
   private indicator!: FitBreaksIndicator;
@@ -36,7 +37,7 @@ export default class FitBreaksExtension extends Extension {
   private listeners?: number[];
 
   override enable() {
-    const settings = this.getSettings("org.gnome.shell.extensions.fitbreaks");
+    const settings = this.getSettings(settingsKey);
     this.timer = new Timer(settings);
     this.exerciseManager = new ExerciseManager(settings);
     this.toggle = new FitBreaksToggle(this.path);
