@@ -2,5 +2,5 @@
   "uuid": "fitbreaks@jluquer.com",
   "name": "Fit Breaks",
   "description": "Reminds you to stretch or do some exercise",
-  "shell-version": ["46"]
+  "shell-version": ["46", "47"]
 }
