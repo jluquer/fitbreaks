@@ -31,7 +31,6 @@ export const ExerciseListPage = GObject.registerClass(
       this.displayAddExercise();
       this.add(this.exercisesGroup);
       this.settings.connect("changed::exercises", () => {
-        console.log("exercises settings changed");
         this.refreshExerciseList();
       });
     }
@@ -41,12 +40,13 @@ export const ExerciseListPage = GObject.registerClass(
       const box = new Gtk.Box({
         orientation: Gtk.Orientation.HORIZONTAL,
         cssClasses: ["linked", "round"],
-        hexpand: true,
-        vexpand: true,
+        heightRequest: 40,
       });
 
       const textInput = new Gtk.Entry({
         placeholderText: _("New exercise"),
+        hexpand: true,
+        halign: Gtk.Align.FILL,
       });
       textInput.connect("activate", () => this.addNewExercise(textInput));
 
@@ -63,9 +63,8 @@ export const ExerciseListPage = GObject.registerClass(
       addExerciseGroup.add(box);
       this.add(addExerciseGroup);
     }
+
     private addNewExercise(entry: Gtk.Entry) {
-      console.log(`adding new exercise`);
-      console.log(`adding exercise: ${entry.text}`);
       const newExercise = entry.text.trim();
       if (newExercise.length > 0) {
         const exercises = this.exercises ?? [];
@@ -74,10 +73,12 @@ export const ExerciseListPage = GObject.registerClass(
         entry.set_text("");
       }
     }
-    // private removeExercise(exercise: string) {
-    //   const exercises = this.exercises.filter((e) => e !== exercise);
-    //   this.setExercises(exercises);
-    // }
+
+    private removeExercise(exercise: string) {
+      const exercises = this.exercises.filter((e) => e !== exercise);
+      this.setExercises(exercises);
+    }
+
     private getExercisesFromSettings() {
       return this.settings.get_strv(schemas.exercises);
     }
@@ -96,8 +97,16 @@ export const ExerciseListPage = GObject.registerClass(
       const actionRow = new Adw.ActionRow({
         name: exercise,
         title: exercise,
-        iconName: "org.gnome.Settings-trash-file-history-symbolic",
       });
+
+      const removeButton = new Gtk.Button({
+        iconName: "org.gnome.Settings-trash-file-history-symbolic",
+        valign: Gtk.Align.CENTER,
+        cssClasses: ["error"],
+      });
+      removeButton.connect("clicked", () => this.removeExercise(exercise));
+
+      actionRow.add_suffix(removeButton);
       this.exercisesRows.push(actionRow);
       this.exercisesGroup.add(actionRow);
     }
