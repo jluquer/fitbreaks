@@ -39,7 +39,7 @@ export const ExerciseListPage = GObject.registerClass(
       const addExerciseGroup = new Adw.PreferencesGroup();
       const box = new Gtk.Box({
         orientation: Gtk.Orientation.HORIZONTAL,
-        cssClasses: ["linked", "round"],
+        spacing: 10,
         heightRequest: 40,
       });
 
@@ -54,6 +54,8 @@ export const ExerciseListPage = GObject.registerClass(
         child: new Adw.ButtonContent({
           iconName: "list-add-symbolic",
         }),
+        cssClasses: ["suggested-action"],
+        widthRequest: 38,
       });
       addButton.connect("clicked", () => this.addNewExercise(textInput));
 
