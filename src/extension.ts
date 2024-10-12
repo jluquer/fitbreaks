@@ -44,6 +44,7 @@ export default class FitBreaksExtension extends Extension {
     this.indicator = new FitBreaksIndicator(this.path);
     this.indicator.handleVisibility(this.toggle);
     this.indicator.quickSettingsItems.push(this.toggle);
+    this.toggleTimer();
     this.toggle.connect("clicked", this.toggleTimer.bind(this));
     Main.panel.statusArea.quickSettings.addExternalIndicator(this.indicator);
   }

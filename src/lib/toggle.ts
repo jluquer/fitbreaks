@@ -11,6 +11,7 @@ export const FitBreaksToggle = GObject.registerClass(
       super({
         title: _("Fit Breaks"),
         toggleMode: true,
+        checked: true,
       });
 
       this.gicon = getIcon(path, FitIcon);
