@@ -16,11 +16,11 @@ export function notifyExercise(exercise: String) {
   });
 
   return new Promise((resolve) => {
-    notification.addAction("Done!", () => {
-      resolve(true);
-    });
     notification.addAction("Not now", () => {
       resolve(false);
+    });
+    notification.addAction("Done ✅", () => {
+      resolve(true);
     });
     source.addNotification(notification);
   });
