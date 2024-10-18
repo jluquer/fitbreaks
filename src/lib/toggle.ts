@@ -1,12 +1,15 @@
 import GObject from "gi://GObject";
-import { QuickToggle } from "resource:///org/gnome/shell/ui/quickSettings.js";
-import { gettext as _ } from "resource:///org/gnome/shell/extensions/extension.js";
+import { QuickMenuToggle } from "resource:///org/gnome/shell/ui/quickSettings.js";
+import {
+  Extension,
+  gettext as _,
+} from "resource:///org/gnome/shell/extensions/extension.js";
 
 import { getIcon } from "./utils.js";
 import { FitIcon } from "./constants.js";
 
 export const FitBreaksToggle = GObject.registerClass(
-  class FitBreaksToggle extends QuickToggle {
+  class FitBreaksToggle extends QuickMenuToggle {
     constructor(path: String) {
       super({
         title: _("Fit Breaks"),
@@ -15,6 +18,10 @@ export const FitBreaksToggle = GObject.registerClass(
       });
 
       this.gicon = getIcon(path, FitIcon);
+
+      this.menu.addAction("Open preferences", () =>
+        Extension.lookupByURL(import.meta.url)?.openPreferences(),
+      );
     }
   },
 );
