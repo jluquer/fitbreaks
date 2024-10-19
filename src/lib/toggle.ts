@@ -19,7 +19,7 @@ export const FitBreaksToggle = GObject.registerClass(
 
       this.gicon = getIcon(path, FitIcon);
 
-      this.menu.addAction("Open preferences", () =>
+      this.menu.addAction("Configure", () =>
         Extension.lookupByURL(import.meta.url)?.openPreferences(),
       );
     }

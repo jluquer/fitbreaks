@@ -11,17 +11,21 @@ export const Timer = GObject.registerClass(
     },
   },
   class Timer extends GObject.Object {
-    private timerDuration: number;
     private interval?: GLib.Source;
+    private settings!: Gio.Settings;
 
     constructor(settings: Gio.Settings) {
       super();
-      const timerDuration = settings.get_uint(schemas.timerDuration);
-      this.timerDuration = timerDuration ? timerDuration * 60 : 5;
+      this.settings = settings;
+    }
+
+    private getTimerDuration() {
+      const timerDuration = this.settings.get_uint(schemas.timerDuration);
+      return timerDuration ? timerDuration * 60 : 5;
     }
 
     start() {
-      let secondsLeft = this.timerDuration;
+      let secondsLeft = this.getTimerDuration();
       this.emit("tic", secondsLeft);
       this.interval = setInterval(() => {
         secondsLeft -= 1;
